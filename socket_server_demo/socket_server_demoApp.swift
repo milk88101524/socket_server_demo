@@ -11,7 +11,7 @@ import SwiftUI
 struct socket_server_demoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ServerView()
         }
     }
 }
