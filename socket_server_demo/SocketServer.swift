@@ -54,7 +54,7 @@ class SocketServer: ObservableObject {
                 DispatchQueue.main.async {
                     self.appendLog("📩 收到訊息: \(message)")
                 }
-                self.send(message: "Server 回應: \(message)", to: connection)
+                self.send(message: "\(message)", to: connection)
             }
 
             if isComplete || error != nil {
@@ -67,13 +67,17 @@ class SocketServer: ObservableObject {
             }
         }
     }
-
+    
     func send(message: String, to connection: NWConnection) {
         let data = message.data(using: .utf8) ?? Data()
         connection.send(content: data, completion: .contentProcessed { error in
             if let error = error {
                 DispatchQueue.main.async {
                     self.appendLog("❌ 發送錯誤: \(error)")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.appendLog("📤 已發送: \(message)")
                 }
             }
         })

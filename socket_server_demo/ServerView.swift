@@ -10,6 +10,7 @@ import SwiftUI
 struct ServerView: View {
     @StateObject private var server = SocketServer()
     @State private var port: String = "1001"
+    @State private var message: String = ""
 
     var body: some View {
         VStack {
@@ -32,7 +33,20 @@ struct ServerView: View {
                 .buttonStyle(.bordered)
             }
             .padding()
+            HStack {
+                TextField("輸入訊息...", text: $message)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
 
+                Button("發送") {
+                    for connection in server.connections {
+                        server.send(message: message, to: connection)
+                        message = ""
+                    }
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
             ScrollView {
                 VStack(alignment: .leading) {
                     ForEach(server.logs, id: \.self) { log in
